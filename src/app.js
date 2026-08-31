@@ -15,12 +15,15 @@ const app = express();
 
 //security layer  
 app.use(helmet()) ; 
-
 //add cors  
-app.use(cors());
+app.use(cors({
+    origin: process.env.CLIENT_URL
+}));
 
 //middlewares
-app.use(express.json()) ;  
+app.use(express.json({
+    limit : "10kb"
+})) ;  
 
 //middlewares  
 app.use(logger);
