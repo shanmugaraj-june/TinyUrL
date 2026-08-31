@@ -1,4 +1,5 @@
 const express = require("express"); 
+const helmet  = require("helmet") ;
 const createUrlRoute  = require("./routes/CreateUrlRoute") ; 
 const RedirectUrlRoute = require("./routes/RedirectUrlRoute") ;  
 const UrlStatsRoute = require("./routes/UrlStatsRoute") ; 
@@ -9,6 +10,10 @@ const errorMiddleware = require("./middleware/errorMiddleware") ;
 const logger = require("./middleware/LoggerMiddler");
 const db  = require("./config/db") ;
 const app = express(); 
+
+
+//security layer  
+app.use(helmet()) ;
 
 //middlewares
 app.use(express.json()) ;  
