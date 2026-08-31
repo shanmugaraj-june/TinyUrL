@@ -92,12 +92,14 @@ const UpdateUrl = async( shortCode , expiresAt) => {
 } 
 const  GetUrl = async (page , limit) => {
   const skip = (page - 1) * limit  ; 
-  const urls = await urlModel 
-                    .find() 
-                    .sort({createdAt : -1}) 
-                    .skip(skip) 
-                    .limit(limit) ;  
-    const total = await urlModel.countDocuments();
+  const [urls , total] = await Promise.all([
+        urlModel 
+            .find() 
+            .sort({createdAt : -1}) 
+            .skip(skip) 
+            .limit(limit) ,
+        urlModel.countDocuments() 
+  ]) ;
     const totalPages = Math.ceil(total / limit);
     return {
         urls,
