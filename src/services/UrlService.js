@@ -94,7 +94,7 @@ const  GetUrl = async (page , limit) => {
   const skip = (page - 1) * limit  ; 
   const urls = await urlModel 
                     .find() 
-                    .sort({createdAt : 1}) 
+                    .sort({createdAt : -1}) 
                     .skip(skip) 
                     .limit(limit) ;  
     const total = await urlModel.countDocuments();
