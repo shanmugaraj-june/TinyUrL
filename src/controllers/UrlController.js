@@ -85,6 +85,20 @@ const getUrlsController =  asyncHandler( async (req , res) => {
             data : result.urls ,
             pagination : result.pagination 
     })
+}); 
+
+const healthController = asyncHandler(async (req , res)  => {
+        res.json({
+        success : true ,  
+        message : "health API is working"
+       })
 })
 
-module.exports = {  CreateUrlController, redirectUrlController  , getUrlStatsController , deleteUrlController , UpadateController , getUrlsController};
+module.exports = {  
+     CreateUrlController,
+     redirectUrlController  , 
+     getUrlStatsController ,
+     deleteUrlController , 
+     UpadateController , 
+     getUrlsController ,
+     healthController };
