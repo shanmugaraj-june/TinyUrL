@@ -1,5 +1,6 @@
 const express = require("express"); 
-const helmet  = require("helmet") ;
+const helmet  = require("helmet") ; 
+const cors  = require("cors") ;
 const createUrlRoute  = require("./routes/CreateUrlRoute") ; 
 const RedirectUrlRoute = require("./routes/RedirectUrlRoute") ;  
 const UrlStatsRoute = require("./routes/UrlStatsRoute") ; 
@@ -13,7 +14,10 @@ const app = express();
 
 
 //security layer  
-app.use(helmet()) ;
+app.use(helmet()) ; 
+
+//add cors  
+app.use(cors());
 
 //middlewares
 app.use(express.json()) ;  
