@@ -1,5 +1,6 @@
 const urlService  = require('../services/UrlService') ; 
 const asyncHandler = require("../utils/asyncHandler") ; 
+const mongoose =  require("../config/db");
 const AppError = require("../utils/AppError") ;
 const  CreateUrlController  = asyncHandler(async (req , res) => {
         const { originalUrl , expiresAt , customCode} = req.body;
@@ -87,10 +88,17 @@ const getUrlsController =  asyncHandler( async (req , res) => {
     })
 }); 
 
-const healthController = asyncHandler(async (req , res)  => {
-        res.json({
-        success : true ,  
-        message : "health API is working"
+const healthController = asyncHandler(async (req , res)  => { 
+        const isDatabaseConnected = mongoose.connection.readyState
+        res.status(isDatabaseConnected ? 200 : 504).json({
+        success : isDatabaseConnected ,  
+        message : isDatabaseConnected ? 
+              "API is healthy"
+              :"Database is not connected", 
+        database : isDatabaseConnected ? 
+                   "connected" 
+                   :"disConnected"
+
        })
 })
 
