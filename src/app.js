@@ -6,11 +6,11 @@ const RedirectUrlRoute = require("./routes/RedirectUrlRoute") ;
 const UrlStatsRoute = require("./routes/UrlStatsRoute") ; 
 const deleteUrlRoute  = require("./routes/DeleteUrlRoute") ; 
 const UpdateUrlRoute = require("./routes/UpdateUrlRoute") ;  
-const GetUrlRoute = require("./routes/GetUrlRoute");
-const HealthRoute = require("./routes/HealthRoute") ;
+const GetUrlRoute = require("./routes/GetUrlRoute"); 
+const HealthRoute = require("./routes/HealthRoute") ; 
+const AuthRoute = require("./routes/AuthRoute")
 const errorMiddleware = require("./middleware/errorMiddleware") ;
 const logger = require("./middleware/LoggerMiddler");
-const db  = require("./config/db") ;
 const app = express(); 
 
 
@@ -29,6 +29,8 @@ app.use(express.json({
 //middlewares  
 app.use(logger);
 
+//routes register  
+app.use("/api/auth/" , AuthRoute) ;
 
 //routes  createURl 
 // API routes
@@ -47,6 +49,7 @@ app.use("/api/url" , UpdateUrlRoute) ;
 
 // heath check up Api  
 app.use("/api/health" , HealthRoute) ;
+
 // error Middleware ; 
 app.use(errorMiddleware) ;
 

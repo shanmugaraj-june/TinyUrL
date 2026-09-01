@@ -2,8 +2,6 @@ require("dotenv").config();
 const app  = require("./app") ; 
 const {connectDB , mongoose}  = require("./config/db") ;
 const PORT = process.env.PORT || 3000 ; 
-
-
 let server;
 const startServer = async() => {
     try{ 
