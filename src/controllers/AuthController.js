@@ -3,8 +3,7 @@ const AuthService = require("../services/AuthService") ;
 const registerController = asyncHandler( async(req , res ) => { 
      const {name , email , password}  = req.body ; 
      const user  = await AuthService.registerUser(name , email , password ) ; 
-
-      res.status(201).json({
+     return  res.status(201).json({
         success : true , 
         message : "User registered successfully",  
         data : { 
@@ -13,5 +12,17 @@ const registerController = asyncHandler( async(req , res ) => {
            email : user.email 
         }
       })
-} )
-module.exports = {registerController} ;
+} ) ; 
+
+const loginController  = async (req , res) => { 
+    const {email , password}  = req.body ; 
+    const token =  await AuthService.loginUser(email , password) ; 
+     return res.status(200).json({
+        success: true , 
+        message : "Login successful",
+        data : {
+            token 
+        } 
+     })
+}
+module.exports = {registerController  , loginController} ;

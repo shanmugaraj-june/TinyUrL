@@ -81,7 +81,7 @@ const getUrlsController =  asyncHandler( async (req , res) => {
         );
     }
     const result = await urlService.GetUrl(page , limit) ;   
-    res.json({
+    return res.json({
             success : true , 
             data : result.urls ,
             pagination : result.pagination 
@@ -90,7 +90,7 @@ const getUrlsController =  asyncHandler( async (req , res) => {
 
 const healthController = asyncHandler(async (req , res)  => { 
         const isDatabaseConnected = mongoose.connection.readyState
-        res.status(isDatabaseConnected ? 200 : 504).json({
+        return res.status(isDatabaseConnected ? 200 : 504).json({
         success : isDatabaseConnected ,  
         message : isDatabaseConnected ? 
               "API is healthy"
