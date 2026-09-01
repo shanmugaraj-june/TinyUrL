@@ -1,6 +1,6 @@
 const urlService  = require('../services/UrlService') ; 
 const asyncHandler = require("../utils/asyncHandler") ; 
-const mongoose =  require("../config/db");
+const {mongoose} =  require("../config/db");
 const AppError = require("../utils/AppError") ;
 const  CreateUrlController  = asyncHandler(async (req , res) => {
         const { originalUrl , expiresAt , customCode} = req.body;
