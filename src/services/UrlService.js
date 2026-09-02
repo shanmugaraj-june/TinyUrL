@@ -2,7 +2,7 @@ const urlModel = require('../models/UrlModel');
 const AppError  = require("../utils/AppError");
 const counterService = require('./CounterService') ;
  const base62  = require('../utils/base62') ; 
- const createShortUrl = async (originalUrl, expiresAt , customCode) => { 
+ const createShortUrl = async (originalUrl, expiresAt , customCode , userId) => { 
     const existingUrl = await urlModel.findOne({ originalUrl });
     if (existingUrl) { 
         // if existingUser is Not ExpiresAt  
@@ -29,12 +29,13 @@ const counterService = require('./CounterService') ;
         shortCode = customCode  ;
     } else {
         const sequenceValue = await counterService.getNextSequenceValue() ;
-        const shortCode = base62.encode(sequenceValue) ;
+        shortCode = base62.encode(sequenceValue) ;
     }
     const url = new urlModel({
         originalUrl,
         shortCode,
-        expiresAt
+        expiresAt ,
+        user: userId
     });
     await url.save(); 
 

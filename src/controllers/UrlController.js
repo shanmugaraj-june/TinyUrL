@@ -3,8 +3,9 @@ const asyncHandler = require("../utils/asyncHandler") ;
 const {mongoose} =  require("../config/db");
 const AppError = require("../utils/AppError") ;
 const  CreateUrlController  = asyncHandler(async (req , res) => {
-        const { originalUrl , expiresAt , customCode} = req.body;
-        const result = await urlService.createShortUrl(originalUrl, expiresAt ,customCode) ;
+        const { originalUrl , expiresAt , customCode} = req.body; 
+        const userId = req.user.userId ;
+        const result = await urlService.createShortUrl(originalUrl, expiresAt ,customCode , userId) ;
         const shortUrl = `${process.env.BASE_URL}/${result.shortCode}`;
         res.status(201).json({
             success: true,

@@ -14,7 +14,7 @@ const registerController = asyncHandler( async(req , res ) => {
       })
 } ) ; 
 
-const loginController  = async (req , res) => { 
+const loginController  = asyncHandler(async (req , res) => { 
     const {email , password}  = req.body ; 
     const token =  await AuthService.loginUser(email , password) ; 
      return res.status(200).json({
@@ -24,5 +24,5 @@ const loginController  = async (req , res) => {
             token 
         } 
      })
-}
+})
 module.exports = {registerController  , loginController} ;
