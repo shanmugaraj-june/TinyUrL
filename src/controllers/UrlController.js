@@ -25,7 +25,8 @@ const redirectUrlController  = asyncHandler(async(req , res ) => {
 
 const getUrlStatsController = asyncHandler(async(req , res)  => {
       const {shortCode}  = req.params ; 
-      const  url  = await urlService.getUrlStats(shortCode); 
+      const userId = req.user.userId ;
+      const  url  = await urlService.getUrlStats(shortCode , userId); 
 
        return res.status(200).json({
         success : true , 

@@ -65,10 +65,16 @@ const getOriginalUrl = async (shortCode) => {
     return updatedUrl ;
 }; 
 
-const getUrlStats = async (shortCode) => {
-    const url = await urlModel.findOne({shortCode}) ; 
+const getUrlStats = async (shortCode , userId ) => {
+    const url = await urlModel.findOne({
+        shortCode ,
+        user : userId 
+    }) ; 
     if(!url) {
-        throw new AppError("URL not found" , 404) ;
+       throw new AppError(
+      "You are not allowed to view stats for this URL",
+    403
+   );
     } 
     return url ;
 } 
