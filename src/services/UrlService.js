@@ -73,18 +73,24 @@ const getUrlStats = async (shortCode) => {
     return url ;
 } 
 
-const deleteUrl = async(shortCode) => {
-    const  url  = await urlModel.findOneAndDelete({shortCode}) ;  
+const deleteUrl = async(shortCode , userId) => {
+    const  url  = await urlModel.findOneAndDelete({
+        shortCode,
+        user : userId 
+    }) ;  
     if(!url) {
-        throw new AppError("URL not found" , 404) ;
+         throw new AppError("You are not allowed to Delete this URL", 403);
     }
     return  url ;
 } 
 
-const UpdateUrl = async( shortCode , expiresAt) => {
-    const url = await urlModel.findOne({shortCode}) ; 
+const UpdateUrl = async( shortCode , expiresAt  , userId) => {
+    const url = await urlModel.findOne({
+        shortCode,
+        user : userId
+     }) ; 
     if(!url) {
-        throw new AppError("URL not found" , 404) ;
+        throw new AppError("You are not allowed to update this URL", 403);
     }  
     url.expiresAt = expiresAt;
     await url.save();

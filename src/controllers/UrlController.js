@@ -42,7 +42,8 @@ const getUrlStatsController = asyncHandler(async(req , res)  => {
 
 const deleteUrlController = asyncHandler(async(req  , res) => {
       const {shortCode} = req.params ; 
-      const  result = await urlService.deleteUrl(shortCode) ; 
+      const userId = req.user.userId ; 
+      const  result = await urlService.deleteUrl(shortCode , userId) ; 
       return res.status(200).json({
         success: true,
         message: "URL deleted successfully",
@@ -54,8 +55,9 @@ const deleteUrlController = asyncHandler(async(req  , res) => {
 
 const UpadateController = asyncHandler (async (req , res ) => {
     const {expiresAt}  = req.body  ; 
-    const {shortCode} = req.params ;
-    const updatedUrl =   await  urlService.UpdateUrl(shortCode , expiresAt) ; 
+    const {shortCode} = req.params ; 
+    const userId = req.user.userId 
+    const updatedUrl =   await  urlService.UpdateUrl(shortCode , expiresAt  , userId) ; 
      return res.status(200).json({
         success: true,
         data: {
