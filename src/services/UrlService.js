@@ -1,4 +1,5 @@
 const urlModel = require('../models/UrlModel');  
+const {redisClient} = require("../config/redis")
 const AppError  = require("../utils/AppError");
 const counterService = require('./CounterService') ;
  const base62  = require('../utils/base62') ; 
@@ -42,7 +43,25 @@ const counterService = require('./CounterService') ;
     return url;
 }; 
 
-const getOriginalUrl = async (shortCode) => {
+const getOriginalUrl = async (shortCode) => { 
+    const cacheKey = `url:${shortCode}` ; 
+    const cachedUrl = await redisClient.get(cacheKey); 
+    // cache HIT 
+    if(cachedUrl) {
+                console.log("Redis cache HIT");   
+                await urlModel.findOneAndUpdate(
+                { shortCode: shortCode },
+                { $inc: { clickCount: 1 } },
+                { returnDocument: "after" }
+                );  
+        
+        return {
+            originalUrl : cachedUrl 
+        }
+    } 
+    //  cache MISS 
+    console.log("Redis cache MISS");
+
     const url = await urlModel.findOne({
         shortCode: shortCode,
     });   
@@ -55,6 +74,22 @@ const getOriginalUrl = async (shortCode) => {
         throw new AppError("URL has expired", 410) ;
     } 
 
+    // 4. Store URL in Redis
+    if(url.expiresAt){
+        const ttl  = Math.floor((url.expiresAt.getTime() - Date.now()) / 1000); 
+        if(ttl > 0 ){
+            await redisClient.set(cacheKey , 
+                url.originalUrl ,
+                {
+                  EX : ttl 
+                }
+            );
+        } 
+    }else{
+            await redisClient.set(cacheKey , url.originalUrl) ; 
+        }
+    
+    // 5. Increment click count
     const updatedUrl = await urlModel.findOneAndUpdate(
         { shortCode: shortCode },
         { $inc: { clickCount: 1 } },

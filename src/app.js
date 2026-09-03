@@ -8,8 +8,8 @@ const deleteUrlRoute  = require("./routes/DeleteUrlRoute") ;
 const UpdateUrlRoute = require("./routes/UpdateUrlRoute") ;  
 const GetUrlRoute = require("./routes/GetUrlRoute"); 
 const HealthRoute = require("./routes/HealthRoute") ; 
-const AuthRoute = require("./routes/AuthRoute")
-const errorMiddleware = require("./middleware/errorMiddleware") ;
+const AuthRoute = require("./routes/AuthRoute") ;
+const errorMiddleware = require("./middleware/errorMiddleware") ; 
 const logger = require("./middleware/LoggerMiddler");
 const app = express(); 
 
