@@ -120,8 +120,10 @@ const deleteUrl = async(shortCode , userId) => {
         user : userId 
     }) ;  
     if(!url) {
-         throw new AppError("You are not allowed to Delete this URL", 403);
-    }
+         throw new AppError("You are not allowed to delete this URL", 403);
+    } 
+    const cacheKey = `url:${shortCode}`;
+    await redisClient.del(cacheKey);
     return  url ;
 } 
 
@@ -133,8 +135,10 @@ const UpdateUrl = async( shortCode , expiresAt  , userId) => {
     if(!url) {
         throw new AppError("You are not allowed to update this URL", 403);
     }  
-    url.expiresAt = expiresAt;
-    await url.save();
+    url.expiresAt = expiresAt; 
+    await url.save(); 
+    const cacheKey  = `url:${shortCode}` ;
+    await redisClient.del(cacheKey) ;
     return url;
 
 } 
