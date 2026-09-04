@@ -4,18 +4,24 @@ const {connectDB , mongoose}  = require("./config/db") ;
 const { connectRedis } = require("./config/redis");
 const PORT = process.env.PORT || 3000 ; 
 let server;
-const startServer = async() => {
-    try{ 
-        await  connectDB() ;
-        await connectRedis() ;
-        server = app.listen(PORT , () => {
-          console.log(`Server is running on port ${PORT}`) ; 
-       }) 
-    }catch(err) {
-         console.error("Failed to start server");
-         process.exit(1);
+const startServer = async () => {
+    try {
+        await connectDB();
+        try {
+            await connectRedis();
+        } catch (err) {
+            console.error("Redis unavailable. Starting without Redis...");
+        }
+
+        server = app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+
+    } catch (err) {
+        console.error("Failed to start server");
+        process.exit(1);
     }
-}
+};
 
 startServer(); 
 

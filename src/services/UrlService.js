@@ -45,7 +45,12 @@ const counterService = require('./CounterService') ;
 
 const getOriginalUrl = async (shortCode) => { 
     const cacheKey = `url:${shortCode}` ; 
-    const cachedUrl = await redisClient.get(cacheKey); 
+    let cachedUrl ;
+    try{
+        cachedUrl = await redisClient.get(cacheKey); 
+    }catch(err){
+        console.error("Redis GET failed:", err);
+    }
     // cache HIT 
     if(cachedUrl) {
                 console.log("Redis cache HIT");   
@@ -74,8 +79,9 @@ const getOriginalUrl = async (shortCode) => {
         throw new AppError("URL has expired", 410) ;
     } 
 
-    // 4. Store URL in Redis
-    if(url.expiresAt){
+    // 4. Store and TTL validation  URL in Redis
+   try{
+     if(url.expiresAt){
         const ttl  = Math.floor((url.expiresAt.getTime() - Date.now()) / 1000); 
         if(ttl > 0 ){
             await redisClient.set(cacheKey , 
@@ -88,7 +94,9 @@ const getOriginalUrl = async (shortCode) => {
     }else{
             await redisClient.set(cacheKey , url.originalUrl) ; 
         }
-    
+   }catch(err){
+        console.error("Redis SET failed:", err);
+   }
     // 5. Increment click count
     const updatedUrl = await urlModel.findOneAndUpdate(
         { shortCode: shortCode },
