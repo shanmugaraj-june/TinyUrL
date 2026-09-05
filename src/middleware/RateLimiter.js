@@ -1,11 +1,20 @@
 const rateLimit = require("express-rate-limit");
-const createUrlLimiter =  rateLimit({
-    windowMs : 15 * 60 * 1000 , 
-    limit : 10 , 
-    message : {
-        success : false , 
-        message : "Too many requests. Please try again later."
-    }
-}) ; 
+const { RedisStore } = require("rate-limit-redis");
+const { redisClient } = require("../config/redis");
 
-module.exports = createUrlLimiter ; 
+const createUrlLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+
+    limit: 10,
+
+    store: new RedisStore({
+        sendCommand: (...args) => redisClient.sendCommand(args),
+    }),
+
+    message: {
+        success: false,
+        message: "Too many requests. Please try again later."
+    }
+});
+
+module.exports = createUrlLimiter;
