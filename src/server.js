@@ -1,4 +1,5 @@
 require("dotenv").config();
+const app = require("./app");
 const {connectDB , mongoose}  = require("./config/db") ; 
 const { connectRedis } = require("./config/redis");
 const PORT = process.env.PORT || 3000 ; 
@@ -6,12 +7,12 @@ let server;
 const startServer = async () => {
     try {
         await connectDB();
-        try {
-            await connectRedis();
-        } catch (err) {
-            console.error("Redis unavailable. Starting without Redis...");
-        }
-         const app = require("./app");
+
+        // Redis is optional
+        connectRedis();
+
+        const app = require("./app");
+
         server = app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });
